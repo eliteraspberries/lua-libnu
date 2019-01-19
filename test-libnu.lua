@@ -56,7 +56,29 @@ local function test_array_linspace()
     end
 end
 
+local function test_sum_sum()
+    local n = 10
+    local x = nu.array.new('float', n)
+    for i = 1, n do
+        x[i - 1] = i
+    end
+    assert(nu.sum.sum(x, n) == n * (n + 1) / 2)
+end
+
+local function test_sum_meanvar()
+    local n = 10
+    local x = nu.array.new('float', n)
+    for i = 1, n do
+        x[i - 1] = i % 2
+    end
+    local mean, var = nu.sum.meanvar(x, n)
+    assert(mean == 0.5)
+    assert(var == 0.25)
+end
+
 test_array_new()
 test_array_maxmin()
 test_array_add()
 test_array_linspace()
+test_sum_sum()
+test_sum_meanvar()

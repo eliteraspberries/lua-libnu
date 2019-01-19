@@ -4,6 +4,7 @@ local ffi = require('ffi')
 local nu = ffi.load('nu')
 
 ffi.cdef([[
+    typedef struct {float a, b;} nu_tuplefloat;
     typedef struct {float r, i;} nu_complex;
     void *nu_array_alloc(size_t, size_t);
     void nu_array_free(void *);
@@ -21,6 +22,15 @@ ffi.cdef([[
     void nu_array_log(float [], float [], size_t);
     void nu_array_sin(float [], float [], size_t);
     void nu_array_linspace(float [], float, float, size_t);
+    struct nu_sum_state {
+        float sp[256];
+        float sn[256];
+    };
+    void nu_sum_init(struct nu_sum_state *);
+    void nu_sum_add(struct nu_sum_state *, float);
+    float nu_sum_sum(struct nu_sum_state *);
+    float nu_sum(float [], size_t);
+    nu_tuplefloat nu_meanvar(float [], size_t);
 ]])
 
 libnu.float = 'float'
@@ -88,5 +98,19 @@ function array.linspace(x, start, stop, n)
     nu.nu_array_linspace(x, start, stop, n)
 end
 
+local sum = {}
+
+function sum.sum(x, n)
+    return nu.nu_sum(x, n)
+end
+
+function sum.meanvar(x, n)
+    local meanvar = nu.nu_meanvar(x, n)
+    local mean = meanvar.a
+    local var = meanvar.b
+    return mean, var
+end
+
 libnu.array = array
+libnu.sum = sum
 return libnu
