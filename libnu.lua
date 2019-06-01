@@ -50,24 +50,36 @@ end
 
 local function scalar(cfunction)
     return function(x, n)
+        if x == nil then
+            error('nil argument', 2)
+        end
         return tonumber(cfunction(x, n))
     end
 end
 
 local function binary(cfunction)
     return function(z, x, y, n)
+        if z == nil or x == nil or y == nil then
+            error('nil argument', 2)
+        end
         cfunction(z, x, y, n)
     end
 end
 
 local function unary(cfunction)
     return function(z, x, n)
+        if z == nil or x == nil then
+            error('nil argument', 2)
+        end
         cfunction(z, x, n)
     end
 end
 
 local function tuple(cfunction)
     return function(x, n)
+        if x == nil then
+            error('nil argument', 2)
+        end
         local z = cfunction(x, n)
         local a = z.a
         local b = z.b
@@ -102,6 +114,9 @@ array.log = unary(nu.nu_array_log)
 array.sin = unary(nu.nu_array_sin)
 
 function array.linspace(x, start, stop, n)
+    if x == nil then
+        error('nil argument', 2)
+    end
     nu.nu_array_linspace(x, start, stop, n)
 end
 

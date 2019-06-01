@@ -24,6 +24,10 @@ local function test_array_maxmin()
     for i = 1, n do
         x[i - 1] = i
     end
+    for _, f in pairs({'argmax', 'argmin', 'max', 'min'}) do
+        local ok, error = pcall(nu.array[f], nil, 0)
+        assert(ok == false)
+    end
     assert(x[nu.array.argmax(x, n)] == nu.array.max(x, n))
     assert(x[nu.array.argmin(x, n)] == nu.array.min(x, n))
     assert(nu.array.max(x, n) == n)
@@ -39,6 +43,8 @@ local function test_array_add()
         x[i - 1] = i
         y[i - 1] = n - i
     end
+    local ok, error = pcall(nu.array.add, nil, nil, nil, 0)
+    assert(ok == false)
     nu.array.add(z, x, y, n)
     for i = 1, n do
         assert(z[i - 1] == n)
@@ -49,6 +55,8 @@ local function test_array_linspace()
     local n = 10
     local x = nu.array.new('float', n)
     local y = nu.array.new('float', n)
+    local ok, error = pcall(nu.array.linspace, nil, 0, 0, 0)
+    assert(ok == false)
     nu.array.linspace(x, 0.0, 1.0, n)
     nu.array.linspace(y, 1.0, 0.0, n)
     for i = 0, n - 1 do
@@ -62,6 +70,8 @@ local function test_sum_sum()
     for i = 1, n do
         x[i - 1] = i
     end
+    local ok, error = pcall(nu.sum.sum, nil, 0)
+    assert(ok == false)
     assert(nu.sum.sum(x, n) == n * (n + 1) / 2)
 end
 
@@ -71,6 +81,8 @@ local function test_sum_meanvar()
     for i = 1, n do
         x[i - 1] = i % 2
     end
+    local ok, error = pcall(nu.sum.meanvar, nil, 0)
+    assert(ok == false)
     local mean, var = nu.sum.meanvar(x, n)
     assert(mean == 0.5)
     assert(var == 0.25)
