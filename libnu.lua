@@ -48,20 +48,10 @@ function array.new(ctype, n)
     return ffi.gc(a, nu.nu_array_free)
 end
 
-function array.argmax(x, n)
-    return nu.nu_array_argmax(x, n)
-end
-
-function array.argmin(x, n)
-    return nu.nu_array_argmin(x, n)
-end
-
-function array.max(x, n)
-    return nu.nu_array_max(x, n)
-end
-
-function array.min(x, n)
-    return nu.nu_array_min(x, n)
+local function scalar(cfunction)
+    return function(x, n)
+        return tonumber(cfunction(x, n))
+    end
 end
 
 local function binary(cfunction)
@@ -75,6 +65,23 @@ local function unary(cfunction)
         cfunction(z, x, n)
     end
 end
+
+local function tuple(cfunction)
+    return function(x, n)
+        local z = cfunction(x, n)
+        local a = z.a
+        local b = z.b
+        return tonumber(a), tonumber(b)
+    end
+end
+
+array.argmax = scalar(nu.nu_array_argmax)
+
+array.argmin = scalar(nu.nu_array_argmin)
+
+array.max = scalar(nu.nu_array_max)
+
+array.min = scalar(nu.nu_array_min)
 
 array.add = binary(nu.nu_array_add)
 
@@ -100,16 +107,9 @@ end
 
 local sum = {}
 
-function sum.sum(x, n)
-    return nu.nu_sum(x, n)
-end
+sum.sum = scalar(nu.nu_sum)
 
-function sum.meanvar(x, n)
-    local meanvar = nu.nu_meanvar(x, n)
-    local mean = meanvar.a
-    local var = meanvar.b
-    return mean, var
-end
+sum.meanvar = tuple(nu.nu_meanvar)
 
 libnu.array = array
 libnu.sum = sum
