@@ -13,14 +13,14 @@ assert(eq(1.0, 1.0 + 1e-5, 1e-6) == false)
 
 local function test_array_new()
     for n = 1, 10 do
-        local x = nu.array.new('float', 2 ^ n)
+        local x = nu.array.new(nu.float, 2 ^ n)
         assert(x ~= nil)
     end
 end
 
 local function test_array_maxmin()
     local n = 10
-    local x = nu.array.new('float', n)
+    local x = nu.array.new(nu.float, n)
     for i = 1, n do
         x[i - 1] = i
     end
@@ -36,9 +36,9 @@ end
 
 local function test_array_add()
     local n = 10
-    local x = nu.array.new('float', n)
-    local y = nu.array.new('float', n)
-    local z = nu.array.new('float', n)
+    local x = nu.array.new(nu.float, n)
+    local y = nu.array.new(nu.float, n)
+    local z = nu.array.new(nu.float, n)
     for i = 1, n do
         x[i - 1] = i
         y[i - 1] = n - i
@@ -53,8 +53,8 @@ end
 
 local function test_array_linspace()
     local n = 10
-    local x = nu.array.new('float', n)
-    local y = nu.array.new('float', n)
+    local x = nu.array.new(nu.float, n)
+    local y = nu.array.new(nu.float, n)
     local ok, error = pcall(nu.array.linspace, nil, 0, 0, 0)
     assert(ok == false)
     nu.array.linspace(x, 0.0, 1.0, n)
@@ -66,7 +66,7 @@ end
 
 local function test_sum_sum()
     local n = 10
-    local x = nu.array.new('float', n)
+    local x = nu.array.new(nu.float, n)
     for i = 1, n do
         x[i - 1] = i
     end
@@ -77,7 +77,7 @@ end
 
 local function test_sum_meanvar()
     local n = 10
-    local x = nu.array.new('float', n)
+    local x = nu.array.new(nu.float, n)
     for i = 1, n do
         x[i - 1] = i % 2
     end
