@@ -14,14 +14,21 @@ libnu.complex = 'nu_complex'
 
 local array = {}
 
+function array.alloc(ctype, n)
+    return nu.nu_array_alloc(n, ffi.sizeof(ctype))
+end
+
+function array.gc(x)
+    return ffi.gc(x, nu.nu_array_free)
+end
+
 function array.new(ctype, n)
-    local stride = ffi.sizeof(ctype)
-    local ptr = nu.nu_array_alloc(n, stride)
+    local ptr = array.alloc(ctype, n)
     if ptr == nil then
         return nil
     end
     local a = ffi.cast(ctype .. ' *', ptr)
-    return ffi.gc(a, nu.nu_array_free)
+    return array.gc(a)
 end
 
 local function scalar(cfunction)
