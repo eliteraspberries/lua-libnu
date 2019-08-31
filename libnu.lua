@@ -3,6 +3,7 @@
 local libnu = {}
 
 local ffi = require('ffi')
+local math = require('math')
 local nu = ffi.load('nu')
 
 ffi.cdef([[
@@ -92,6 +93,28 @@ function array.new(ctype, n)
     end
     local a = ffi.cast(ctype .. ' *', ptr)
     return array.gc(a)
+end
+
+function array.reverse(x, n)
+    local m = math.floor(n / 2)
+    for i = 0, m - 1 do
+        local tmp = x[i]
+        x[i] = x[n - 1 - i]
+        x[n - 1 - i] = tmp
+    end
+end
+
+function array.zero(x, n)
+    if ffi.typeof(x) == ffi.typeof('nu_complex *') then
+        for i = 0, n - 1 do
+            x[i].r = 0
+            x[i].i = 0
+        end
+    else
+        for i = 0, n - 1 do
+            x[i] = 0
+        end
+    end
 end
 
 local function scalar(cfunction)
