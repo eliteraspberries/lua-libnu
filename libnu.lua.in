@@ -36,6 +36,9 @@ local function scalar(cfunction)
         if x == nil then
             error('nil argument', 2)
         end
+        if n == 0 then
+            error('zero size argument', 2)
+        end
         return tonumber(cfunction(x, n))
     end
 end
