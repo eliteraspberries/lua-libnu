@@ -88,9 +88,22 @@ local function test_sum_meanvar()
     assert(var == 0.25)
 end
 
+local function test_diff()
+    local n = 10
+    local h = 1.0 / n
+    local x = nu.array.new(nu.float, n)
+    local y = nu.array.new(nu.float, n)
+    nu.array.linspace(x, 0.0, 1.0, n)
+    nu.diff.diff(h, nu.diff.kmax, y, x, n)
+    for i = 0, n - 1 do
+        assert(eq(y[i], 1.0, 1e-5))
+    end
+end
+
 test_array_new()
 test_array_maxmin()
 test_array_add()
 test_array_linspace()
 test_sum_sum()
 test_sum_meanvar()
+test_diff()

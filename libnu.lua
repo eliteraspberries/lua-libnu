@@ -198,6 +198,15 @@ sum.sum = scalar(nu.nu_sum)
 
 sum.meanvar = tuple(nu.nu_meanvar)
 
+local diff = {}
+
+diff.kmax = tonumber(nu.nu_diff_kmax)
+
+function diff.diff(h, k, z, x, n)
+    nu.nu_diff(h, k, z, x, n)
+end
+
 libnu.array = array
 libnu.sum = sum
+libnu.diff = diff
 return libnu
